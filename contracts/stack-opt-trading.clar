@@ -383,3 +383,20 @@
     )
   )
 )
+
+;; Read-Only Functions
+
+;; Get option details
+(define-read-only (get-option (option-id uint))
+  (map-get? options option-id)
+)
+
+;; Get user position
+(define-read-only (get-user-position (user principal))
+  (map-get? user-positions user)
+)
+
+;; Get protocol fee rate
+(define-read-only (get-protocol-fee-rate)
+  (var-get protocol-fee-rate)
+)
