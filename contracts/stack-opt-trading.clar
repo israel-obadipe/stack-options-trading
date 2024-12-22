@@ -40,4 +40,34 @@
 (define-constant ERR-INVALID-TIMESTAMP (err u1011))
 (define-constant ERR-INVALID-ADDRESS (err u1012))
 (define-constant ERR-ZERO-ADDRESS (err u1013))
-(define-constant ERR-EMPTY-SYMBOL (err u1014))
+
+;; Data Maps and Vars
+
+;; Options Data Map
+(define-map options
+  uint  ;; option-id
+  {
+    writer: principal,
+    holder: (optional principal),
+    collateral-amount: uint,
+    strike-price: uint,
+    premium: uint,
+    expiry: uint,
+    is-exercised: bool,
+    option-type: (string-ascii 4),  ;; "CALL" or "PUT"
+    state: (string-ascii 9)         ;; "ACTIVE" or "EXERCISED"
+  }
+)
+
+;; User Positions Map
+(define-map user-positions
+  principal
+  {
+    written-options: (list 10 uint),
+    held-options: (list 10 uint),
+    total-collateral-locked: uint
+  }
+)
+
+;; Approved Tokens Map
+(define-map approved-tokens principal bool)
