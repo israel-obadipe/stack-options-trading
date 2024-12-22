@@ -40,8 +40,10 @@
 (define-constant ERR-INVALID-TIMESTAMP (err u1011))
 (define-constant ERR-INVALID-ADDRESS (err u1012))
 (define-constant ERR-ZERO-ADDRESS (err u1013))
+(define-constant ERR-EMPTY-SYMBOL (err u1014))
 
 ;; Data Maps and Vars
+
 
 ;; Options Data Map
 (define-map options
@@ -447,6 +449,23 @@
     ) ERR-NOT-AUTHORIZED)
 
     (map-set approved-tokens token approved)
+    (ok true)
+  )
+)
+
+;; Set allowed symbol
+(define-public (set-allowed-symbol (symbol (string-ascii 10)) (allowed bool))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-AUTHORIZED)
+    (asserts! (is-valid-symbol symbol) ERR-EMPTY-SYMBOL)
+
+    ;; Prevent removing critical symbols
+    (asserts! (or 
+      allowed
+      (not (is-critical-symbol symbol))
+    ) ERR-NOT-AUTHORIZED)
+
+    (map-set allowed-symbols symbol allowed)
     (ok true)
   )
 )
