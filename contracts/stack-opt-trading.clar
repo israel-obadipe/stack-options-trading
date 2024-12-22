@@ -213,3 +213,23 @@
   }))
   (var-get next-option-id)
 )
+
+;; Check if token is approved
+(define-private (is-approved-token (token principal))
+  (default-to false (map-get? approved-tokens token))
+)
+
+;; Check if symbol is allowed
+(define-private (is-allowed-symbol (symbol (string-ascii 10)))
+  (default-to false (map-get? allowed-symbols symbol))
+)
+
+;; Validate principal address
+(define-private (is-valid-principal (address principal))
+  (and
+    (not (is-eq address (as-contract tx-sender)))
+    (not (is-eq address .base))
+    (not (is-eq address tx-sender))
+    true
+  )
+)
