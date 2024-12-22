@@ -412,3 +412,23 @@
     (ok true)
   )
 )
+
+;; Update price feed
+(define-public (update-price-feed
+    (symbol (string-ascii 10))
+    (price uint)
+    (timestamp uint))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-AUTHORIZED)
+    (asserts! (is-allowed-symbol symbol) ERR-INVALID-SYMBOL)
+    (asserts! (>= timestamp block-height) ERR-INVALID-TIMESTAMP)
+    (asserts! (> price u0) ERR-INVALID-STRIKE-PRICE)
+
+    (map-set price-feeds symbol {
+      price: price,
+      timestamp: timestamp,
+      source: tx-sender
+    })
+    (ok true)
+  )
+)
