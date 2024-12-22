@@ -71,3 +71,21 @@
 
 ;; Approved Tokens Map
 (define-map approved-tokens principal bool)
+
+;; Price Feeds Map
+(define-map price-feeds
+  (string-ascii 10)
+  {
+    price: uint,
+    timestamp: uint,
+    source: principal
+  }
+)
+
+;; Allowed Symbols Map
+(define-map allowed-symbols (string-ascii 10) bool)
+
+;; Contract Variables
+(define-data-var next-option-id uint u1)
+(define-data-var contract-owner principal tx-sender)
+(define-data-var protocol-fee-rate uint u100) ;; 1% = 100 basis points
