@@ -432,3 +432,21 @@
     (ok true)
   )
 )
+
+;; Set approved token
+(define-public (set-approved-token (token principal) (approved bool))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-AUTHORIZED)
+    (asserts! (is-valid-principal token) ERR-INVALID-ADDRESS)
+    (asserts! (not (is-eq token .base)) ERR-INVALID-TOKEN)
+
+    ;; Prevent removing critical tokens
+    (asserts! (or 
+      approved
+      (not (is-critical-token token))
+    ) ERR-NOT-AUTHORIZED)
+
+    (map-set approved-tokens token approved)
+    (ok true)
+  )
+)
