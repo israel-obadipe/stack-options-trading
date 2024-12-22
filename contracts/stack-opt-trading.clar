@@ -233,3 +233,28 @@
     true
   )
 )
+
+;; Validate symbol format
+(define-private (is-valid-symbol (symbol (string-ascii 10)))
+  (and
+    (not (is-eq symbol ""))
+    (not (is-eq symbol " "))
+    (>= (len symbol) u2)
+  )
+)
+
+;; Check if token is critical
+(define-private (is-critical-token (token principal))
+  (or
+    (is-eq token .wrapped-btc)
+    (is-eq token .wrapped-stx)
+  )
+)
+
+;; Check if symbol is critical
+(define-private (is-critical-symbol (symbol (string-ascii 10)))
+  (or
+    (is-eq symbol "BTC-USD")
+    (is-eq symbol "STX-USD")
+  )
+)
