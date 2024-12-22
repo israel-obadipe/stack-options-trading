@@ -89,3 +89,21 @@
 (define-data-var next-option-id uint u1)
 (define-data-var contract-owner principal tx-sender)
 (define-data-var protocol-fee-rate uint u100) ;; 1% = 100 basis points
+
+;; Private Functions
+
+;; Utility function to get minimum of two numbers
+(define-private (get-min (a uint) (b uint))
+  (if (< a b) a b)
+)
+
+;; Validate collateral requirements for options
+(define-private (check-collateral-requirement 
+    (amount uint) 
+    (strike uint) 
+    (option-type (string-ascii 4)))
+  (if (is-eq option-type "CALL")
+    (>= amount strike)
+    (>= amount (/ (* strike u100000000) (get-current-price)))
+  )
+)
