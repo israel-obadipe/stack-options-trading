@@ -400,3 +400,15 @@
 (define-read-only (get-protocol-fee-rate)
   (var-get protocol-fee-rate)
 )
+
+;; Admin Functions
+
+;; Set protocol fee rate
+(define-public (set-protocol-fee-rate (new-rate uint))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-owner)) ERR-NOT-AUTHORIZED)
+    (asserts! (<= new-rate u1000) ERR-INVALID-PREMIUM)  ;; Max 10%
+    (var-set protocol-fee-rate new-rate)
+    (ok true)
+  )
+)
